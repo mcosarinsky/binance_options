@@ -89,7 +89,7 @@ def main():
     if os.path.exists(csv_file):
         df_existing = pd.read_csv(csv_file, parse_dates=["Date", "Expiry"])
         df_combined = pd.concat([df_existing, df_new], ignore_index=True)
-        df_combined.drop_duplicates(subset=["Date", "Symbol"], inplace=True)  # optional: avoid repeated entries per hour
+        df_combined.drop_duplicates(subset=["Symbol"], inplace=True)  # optional: avoid repeated entries per hour
     else:
         df_combined = df_new
 
