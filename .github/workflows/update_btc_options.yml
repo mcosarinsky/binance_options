@@ -24,7 +24,7 @@ jobs:
         pip install requests pandas
 
     - name: Run script
-      run: python btc_options.py
+      run: python ./btc_options.py
 
     - name: Commit and push CSV
       run: |
