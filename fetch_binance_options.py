@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime, timedelta
 import pandas as pd
+import os
 
 BASE_URL = "https://eapi.binance.com"
 
@@ -80,9 +81,19 @@ def main():
     all_btc_symbols = get_all_option_symbols()
     btc_symbols_near_expiry = filter_symbols_by_expiry(all_btc_symbols, max_days=6)
     print(f"Found {len(btc_symbols_near_expiry)} BTC options expiring in the next 6 days")
-    
-    df = build_option_dataframe(btc_symbols_near_expiry)
-    df.to_csv("btc_options_near_expiry.csv", index=False)
+
+    df_new = build_option_dataframe(btc_symbols_near_expiry)
+
+    csv_file = "btc_options_near_expiry.csv"
+
+    if os.path.exists(csv_file):
+        df_existing = pd.read_csv(csv_file, parse_dates=["Date", "Expiry"])
+        df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+        df_combined.drop_duplicates(subset=["Date", "Symbol"], inplace=True)  # optional: avoid repeated entries per hour
+    else:
+        df_combined = df_new
+
+    df_combined.to_csv(csv_file, index=False)
 
 if __name__ == "__main__":
     main()
