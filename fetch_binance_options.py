@@ -36,7 +36,7 @@ def filter_symbols_by_expiry(symbols, max_days=6):
     return filtered
 
 def get_btc_spot_price():
-    url = "https://api.binance.com/api/v3/ticker/price"
+    url = "https://binance.com/api/v3/ticker/price"
     params = {"symbol": "BTCUSDT"}
     try:
         response = requests.get(url, params=params)
